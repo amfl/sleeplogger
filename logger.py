@@ -36,15 +36,17 @@ def main():
 
 	# Begin main loop
 	log("Beginning loop.")
-	lastPressed = None
+#	lastPressed = None
 	while True:
-		pygame.event.get()
+		pygame.event.wait()
 
 		for j in controllers:
 			for i in range(j.get_numbuttons()):
-				if j.get_button(i) and j != lastPressed:
-					lastPressed = j
+				if j.get_button(i): #and j != lastPressed:
+					# lastPressed = j
 					writeToFile('a' if j.get_id()==0 else 's')
+					# Sleep to avoid spamming the log
+					time.sleep(5)
 	log("All done.")
 
 if __name__ == "__main__":
