@@ -3,6 +3,8 @@ import time, sys
 import datetime
 import os
 
+SLEEPLOG_FN = sys.argv[1] if len(sys.argv) > 1 else 'sleep.log'
+
 # Write to stderr to avoid the SDL debug line that was left in
 def log(string):
 	sys.stderr.write(string+'\n')
@@ -15,7 +17,7 @@ def getTimestamp():
 def writeToFile(prefix):
 	string = "%s %s" % (prefix, getTimestamp())
 	log(string)
-	with open('sleep.log', 'a') as f:
+	with open(SLEEPLOG_FN, 'a') as f:
 		f.write(string+'\n')
 
 def main():
