@@ -104,17 +104,21 @@ function createBar(fromDate, toDate) {
 // 	return result / ONE_DAY;
 // }
 
+function buildLegend() {
+	// Build the legend
+	elem = $('<div>').addClass('legend');
+	for (var i=0;i<24;i++) {
+		elem.append($('<div>')
+			.text(i.toString())
+			.addClass('divider'));
+	}
+	return elem;
+}
+
 $(function() {
 	graph = $('#graph')
 
-	// Build the legend
-	$('.legend').each(function(i) {
-		for (var i=0;i<24;i++) {
-			$(this).append($('<div>')
-				.text(i.toString())
-				.addClass('divider'));
-		}
-	})
+	graph.prepend(buildLegend());
 
 	// Get the input data
 	$.get(INFILE, function(data) {
@@ -123,6 +127,7 @@ $(function() {
 		var lastSleptDate = null;
 		var lastAwakeDate = null;
 		for (var i = 0; i < lines.length; i++) {
+			if (lines[i].length == 0 || lines[i][0] == '#') continue;
 			datum = lines[i].split(' ');
 
 			// Store whether we awoke or fell asleep at this date
@@ -152,6 +157,8 @@ $(function() {
 				}
 				lastAwakeDate = date;
 			}
-		};
+		}
+		graph.prepend(buildLegend());
+
 	}, 'text')
 });

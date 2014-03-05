@@ -9,7 +9,6 @@ body {
 .legend {
 	background-color: #90A959;
 	overflow: hidden;
-	margin-bottom: 8px;
 }
 .divider:nth-child(odd) {
 	background-color: rgba(0,0,0,0.2);
@@ -22,6 +21,12 @@ body {
 .line {
 	min-height: 12px;
 	background-color: #444;
+}
+.line:hover {
+	background-color: #333;
+}
+.line:hover .datum {
+	background-color: #eee;
 }
 .datum {
 	border-radius: 3px;
