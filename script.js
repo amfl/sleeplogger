@@ -148,7 +148,7 @@ $(function() {
 				if (lastSleptDate != null) {
 					createBar(lastSleptDate, date);
 				}
-				else {
+				else if (lastAwakeDate != null) {
 					// Assume that last time we 'woke up', we drifted straight
 					// back to sleep again shortly after, because we forgot to press the
 					// sleep button.
