@@ -1,0 +1,33 @@
+body {
+	
+	background-color: #222;
+}
+
+#graph {
+	position: relative;
+}
+.legend {
+	background-color: #90A959;
+	overflow: hidden;
+	margin-bottom: 8px;
+}
+.divider:nth-child(odd) {
+	background-color: rgba(0,0,0,0.2);
+}
+.divider {
+	float: left;
+	width: 4.166%;
+	text-align: center;
+}
+.line {
+	min-height: 12px;
+	background-color: #444;
+}
+.datum {
+	border-radius: 3px;
+	position: absolute;
+	margin: 1px 0px;
+	height: 10px;
+	background-color: #ddd;
+	clear: both;
+}
