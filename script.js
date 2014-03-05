@@ -138,23 +138,24 @@ $(function() {
 			date = new Date(strDate)
 
 			if (transition == 's') {
-				if (lastSleptDate == null) {
-					lastSleptDate = date;
-				}
+				// Always set the new lastSleptDate
+				// Assume if we have two 'sleep' entries one after the other,
+				// we thought we were going to fall asleep the first time, but actually didn't.
+				// Therefore, the first sleep entry is invalid.
+				lastSleptDate = date;
 			}
 			else if (transition == 'a') {
 				if (lastSleptDate != null) {
 					createBar(lastSleptDate, date);
-
-					lastSleptDate = null
 				}
 				else {
 					// Assume that last time we 'woke up', we drifted straight
 					// back to sleep again shortly after, because we forgot to press the
 					// sleep button.
-					synthesizedSleepDate = new Date(lastAwakeDate.getTime() + 4 * ONE_MINUTE);
-					createBar(synthesizedSleepDate, date);
+					lastSleptDate = new Date(lastAwakeDate.getTime() + 4 * ONE_MINUTE);
+					createBar(lastSleptDate, date);
 				}
+				lastSleptDate = null
 				lastAwakeDate = date;
 			}
 		}
