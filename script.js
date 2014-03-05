@@ -62,11 +62,13 @@ function _createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate) {
 		$('#graph').prepend(dayLine = $('<div>').addClass('line').attr('id', 'day-'+dayIndex));
 	} 
 
-	dayLine.append($('<div>')
+	var newBar = $('<div>')
 		.addClass('datum')
 		.prop('title', fromDate + '\n' + toDate)
 		.css('width', boxWidth * 100 + '%')
-		.css('left', boxLeft * 100 + '%'));
+		.css('left', boxLeft * 100 + '%');
+	dayLine.append(newBar);
+	return newBar;
 }
 
 function createBar(fromDate, toDate) {
@@ -89,10 +91,7 @@ function createBar(fromDate, toDate) {
 		boxWidth -= tempWidth;
 		dayIndex++;
 	}
-	_createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate);
-
-	
-	// assert(false);
+	return _createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate);
 }
 
 // function proportionThroughDay(date) {
@@ -158,6 +157,16 @@ $(function() {
 				lastSleptDate = null
 				lastAwakeDate = date;
 			}
+		}
+
+		if (lastSleptDate != null) {
+			// We're currently asleep! Show that on screen.
+			//var endOfDay = new Date(lastSleptDate.getTime() + ONE_DAY);
+			//endOfDay.setHours(0,0,0,0);
+			//var sleepingBar = createBar(lastSleptDate, endOfDay);
+			var sleepingBar = createBar(lastSleptDate, new Date());
+			sleepingBar.addClass('sleeping_now')
+				.prop('title', lastSleptDate + '\nNow');	
 		}
 		graph.prepend(buildLegend());
 
