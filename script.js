@@ -119,6 +119,8 @@ $(function() {
 
 	graph.prepend(buildLegend());
 
+	var tzOffset = new Date().getTimezoneOffset();
+
 	// Get the input data
 	$.get(INFILE, function(data) {
 		lines = data.split('\n')
@@ -133,8 +135,9 @@ $(function() {
 			transition = datum[0];
 
 			// Convert the date into JS's built-in datetime format.
-			strDate = $.trim(datum[1].replace(/\./g, '-')+'T'+datum[2].replace(/\-/g, ':'))
+			strDate = $.trim(datum[1].replace(/\./g, '-')+'T'+datum[2].replace(/\-/g, ':'))+'Z'
 			date = new Date(strDate)
+			date = new Date(date.getTime() + tzOffset * ONE_MINUTE);
 
 			if (transition == 's') {
 				// Always set the new lastSleptDate
