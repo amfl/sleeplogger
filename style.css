@@ -19,23 +19,27 @@ body {
 	text-align: center;
 }
 .line {
-	min-height: 12px;
+	min-height: 7px;
 	background-color: #444;
 }
 .line:hover {
 	background-color: #333;
 }
 .line:hover .datum {
-	background-color: #eee;
+	opacity: 1;
 }
 .datum {
 	border-radius: 3px;
 	position: absolute;
 	margin: 1px 0px;
-	height: 10px;
-	background-color: #ddd;
+	height: 6px;
+	background-color: #fff;
+	opacity: 0.8;
 	clear: both;
 }
-.sleeping_now {
+.datum.insomnia {
+	background-color: #a55;
+}
+.datum.sleeping_now {
 	background-color: #88d;
 }

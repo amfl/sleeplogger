@@ -67,6 +67,7 @@ function _createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate) {
 		.prop('title', fromDate + '\n' + toDate)
 		.css('width', boxWidth * 100 + '%')
 		.css('left', boxLeft * 100 + '%');
+
 	dayLine.append(newBar);
 	return newBar;
 }
@@ -84,14 +85,16 @@ function createBar(fromDate, toDate) {
 
 	var boxWidth = daysBetween(fromDate, toDate);
 
+	var result = []
 	while (boxLeft + boxWidth > 1) {
 		var tempWidth = 1-boxLeft
-		_createBar(dayIndex, boxLeft, tempWidth, fromDate, toDate);
+		result.push(_createBar(dayIndex, boxLeft, tempWidth, fromDate, toDate));
 		boxLeft = 0;
 		boxWidth -= tempWidth;
 		dayIndex++;
 	}
-	return _createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate);
+	result.push(_createBar(dayIndex, boxLeft, boxWidth, fromDate, toDate));
+	return result;
 }
 
 // function proportionThroughDay(date) {
@@ -125,8 +128,9 @@ $(function() {
 	$.get(INFILE, function(data) {
 		lines = data.split('\n')
 
-		var lastSleptDate = null;
-		var lastAwakeDate = null;
+		var firstSleptDate = null;
+		var lastSleptDate  = null;
+		var lastAwakeDate  = null;
 		for (var i = 0; i < lines.length; i++) {
 			if (lines[i].length == 0 || lines[i][0] == '#') continue;
 			datum = lines[i].split(' ');
@@ -140,6 +144,8 @@ $(function() {
 			date = new Date(date.getTime() + tzOffset * ONE_MINUTE);
 
 			if (transition == 's') {
+				if (!firstSleptDate) firstSleptDate = date;
+			
 				// Always set the new lastSleptDate
 				// Assume if we have two 'sleep' entries one after the other,
 				// we thought we were going to fall asleep the first time, but actually didn't.
@@ -148,6 +154,13 @@ $(function() {
 			}
 			else if (transition == 'a') {
 				if (lastSleptDate != null) {
+					if (firstSleptDate != lastSleptDate) {
+						insomniaBars = createBar(firstSleptDate, lastSleptDate);
+						$(insomniaBars).each(function() {
+							$(this).addClass('insomnia');
+						});
+					}
+					firstSleptDate = null;
 					createBar(lastSleptDate, date);
 				}
 				else if (lastAwakeDate != null) {
@@ -167,9 +180,11 @@ $(function() {
 			//var endOfDay = new Date(lastSleptDate.getTime() + ONE_DAY);
 			//endOfDay.setHours(0,0,0,0);
 			//var sleepingBar = createBar(lastSleptDate, endOfDay);
-			var sleepingBar = createBar(lastSleptDate, new Date());
-			sleepingBar.addClass('sleeping_now')
-				.prop('title', lastSleptDate + '\nNow');	
+			var sleepingBars = createBar(lastSleptDate, new Date(), ['sleeping_now']);
+			$(sleepingBars).each(function() {
+				$(this).addClass('sleeping_now')
+					.prop('title', lastSleptDate + '\nNow');
+			});
 		}
 		graph.prepend(buildLegend());
 
